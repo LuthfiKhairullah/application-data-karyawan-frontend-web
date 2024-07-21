@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Data Pribadi</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.0/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-minimal@5/minimal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Application Data Pribadi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Monitoring</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <div class="bg-warning p-3 mb-3">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="nik_search" class="form-label">NIK</label>
+                        <input type="text" class="form-control" id="nik_search">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name_search" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="name_search">
+                    </div>
+                    <div class="mb-3 text-end">
+                        <button type="button" class="btn btn-primary" id="btn_search_karyawan">Search</button>
+                        <button type="button" class="btn btn-primary" id="btn_add_karyawan">Add</button>
+                    </div>
+                </form>
+            </div>
+            <div class="mb-3">
+                <div class="table-responsive">
+                    <table class="table table-striped nowrap" id="table_karyawan" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">No</th>
+                                <th class="text-center align-middle">NIK</th>
+                                <th class="text-center align-middle">Nama Lengkap</th>
+                                <th class="text-center align-middle">Umur</th>
+                                <th class="text-center align-middle">Tanggal Lahir</th>
+                                <th class="text-center align-middle">Jenis Kelamin</th>
+                                <th class="text-center align-middle">Alamat</th>
+                                <th class="text-center align-middle">Negara</th>
+                                <th class="text-center align-middle">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list_karyawan"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="modal_update" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="modalUpdateLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <form method="post" id="form_update_karyawan">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUpdateLabel"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="nik_update" class="form-label">NIK</label>
+                            <input type="text" class="form-control" id="nik_update">
+                        </div>
+                        <div class="mb-3">
+                            <label for="name_update" class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="name_update">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jenis Kelamin</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="jenis_kelamin_update" id="optionAdd1"
+                                    value="Laki-laki">
+                                <label class="form-check-label" for="optionAdd1">Laki-laki</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="jenis_kelamin_update" id="optionAdd2"
+                                    value="Perempuan">
+                                <label class="form-check-label" for="optionAdd2">Perempuan</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tgl_lahir_update" class="form-label">Tanggal Lahir</label>
+                            <input type="date" class="form-control" id="tgl_lahir_update">
+                        </div>
+                        <div class="mb-3">
+                            <label for="alamat_update" class="form-label">Alamat</label>
+                            <textarea class="form-control" id="alamat_update" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="negara_update" class="form-label">Negara</label>
+                            <select class="form-select" id="negara_update" style="width:100%">
+                                <option value="" selected>Pilih Negara</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="Inggris">Inggris</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btn_update_karyawan"></button>
+                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.0/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/2.1.0/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        const apiUrl = 'https://data-karyawan-api.up.railway.app/api/karyawan';
+
+        const nikSearchElement = document.querySelector('#nik_search');
+        const nameSearchElement = document.querySelector('#name_search');
+
+        const nikElement = document.querySelector('#nik_update');
+        const nameElement = document.querySelector('#name_update');
+        const tgl_lahirElement = document.querySelector('#tgl_lahir_update');
+        const alamatElement = document.querySelector('#alamat_update');
+        const negaraElement = document.querySelector('#negara_update');
+
+        var table = '';
+
+        $('#nik_search').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        $('#nik_update').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        $(document).ready(async function () {
+            await setNegara();
+            $('#negara_update').select2({
+                dropdownParent: $('#modal_update')
+            });
+
+            table = await $('#table_karyawan').DataTable({
+                ajax: {
+                    url: `${apiUrl}/get_karyawan`,
+                    dataSrc: function (json) {
+                        if (json.content.length === 0) {
+                            showInfo('Info', 'No data available');
+                        }
+                        return json.content;
+                    },
+                    error: function (xhr, error, thrown) {
+                        showError('Error...', 'Failed to fetch data');
+                        console.error('Error:', error);
+                        console.error('Thrown:', thrown);
+                        console.error('XHR:', xhr);
+                    }
+                },
+                columns: [
+                    { data: null },
+                    { data: 'nik' },
+                    { data: 'name' },
+                    { data: 'umur' },
+                    { data: 'tgl_lahir' },
+                    { data: 'jenis_kelamin' },
+                    { data: 'alamat' },
+                    { data: 'negara' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return `<div class="d-flex justify-content-center">
+                                <button type="button" class="btn btn-sm btn-warning m-1" id="btn_detail_karyawan" onclick="detail_karyawan(${row.nik})">Detail</button>
+                                <button type="button" class="btn btn-sm btn-primary m-1" id="btn_edit_karyawan" onclick="edit_karyawan(${row.nik})">Edit</button>
+                                <button type="button" class="btn btn-sm btn-danger m-1" onclick="showConfirm(${row.nik})">Delete</button>
+                            </div>`;
+                        }
+                    }
+                ],
+                responsive: true,
+                drawCallback: function (settings) {
+                    var api = this.api();
+                    var info = api.page.info();
+                    api.column(0, { page: 'current' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1 + info.start;
+                    });
+                }
+            });
+        });
+
+        $('#btn_add_karyawan').click(function () {
+            $('#modalUpdateLabel').html('Tambah Data Baru');
+            $('#btn_update_karyawan').html('Simpan');
+            $('#btn_update_karyawan').attr('onclick', 'add_karyawan()');
+            $('#btn_update_karyawan').show();
+            $('#form_update_karyawan input').removeAttr('disabled');
+            $('#form_update_karyawan textarea').removeAttr('disabled');
+            $('#form_update_karyawan select').removeAttr('disabled');
+            $('#nik_update').removeAttr('disabled');
+            $('#negara_update').val('').trigger('change');
+            $('#form_update_karyawan')[0].reset();
+            $('#modal_update').modal('show');
+        });
+
+        $('#btn_search_karyawan').click(async function () {
+            let nik = nikSearchElement.value;
+            let name = nameSearchElement.value;
+            let params = '';
+            if (nik != null && name != null) params = `?nik=${nik}&name=${name}`;
+            else if (name != null) message = `?name=${name}`;
+            else if (nik != null) message = `?nik=${nik}`;
+            try {
+                const responseJson = await axios.get(apiUrl + '/get_karyawan' + params);
+                table.clear().rows.add(responseJson.data.content).draw();
+            } catch (error) {
+                showError("Error...", error.response.data.message);
+            }
+        });
+
+        async function setNegara() {
+            const responseJson = await axios.get('https://restcountries.com/v3.1/all');
+            negaraElement.innerHTML = '<option value="" selected>Pilih Negara</option>';
+            responseJson.data.forEach(negara => {
+                const option = document.createElement('option');
+                option.value = negara.name.common;
+                option.text = negara.name.common;
+                negaraElement.appendChild(option);
+            });
+        }
+
+        function getUmur(birthDate) {
+            birthDate = new Date(birthDate);
+
+            let now = new Date();
+
+            let umur = now.getFullYear() - birthDate.getFullYear();
+
+            let selisihBulan = now.getMonth() - birthDate.getMonth();
+            if (selisihBulan < 0 || (selisihBulan === 0 && now.getDate() < birthDate.getDate())) {
+                umur--;
+            }
+
+            return umur;
+        }
+
+        async function loadKaryawan() {
+            try {
+                const responseJson = await axios.get(apiUrl + '/get_karyawan');
+                table.clear().rows.add(responseJson.data.content).draw();
+            } catch (error) {
+                return console.error(error.response.data.message);
+            }
+        }
+
+        async function add_karyawan() {
+            let umur = await getUmur(tgl_lahirElement.value);
+
+            if (nikElement.value != '' || nameElement.value != '') {
+                let data = {
+                    nik: parseInt(nikElement.value),
+                    name: nameElement.value,
+                    jenis_kelamin: $('input[name="jenis_kelamin_update"]:checked').val(),
+                    umur: umur,
+                    tgl_lahir: tgl_lahirElement.value,
+                    alamat: alamatElement.value,
+                    negara: negaraElement.value,
+                }
+
+                try {
+                    const response = await axios.post(apiUrl + '/add_karyawan', data);
+                    await loadKaryawan();
+                    $("#modal_update").modal('hide');
+                } catch (error) {
+                    showError("Error...", error.response.data.message);
+                }
+            } else {
+                if (nikElement.value == '') showError("Error", "NIK is required");
+                else if (nameElement.value == '') showError("Error", "Name is required");
+            }
+        }
+
+        async function set_detail_karyawan(nikParam) {
+            $('#form_update_karyawan')[0].reset();
+            if (nikParam != '') {
+                try {
+                    const responseJson = await axios.get(apiUrl + '/get_karyawan/' + nikParam);
+                    let response = responseJson.data.content[0];
+                    nikElement.value = response.nik;
+                    nameElement.value = response.name;
+                    $(`input[name="jenis_kelamin_update"][value="${response.jenis_kelamin}"]`).prop('checked', true);
+                    tgl_lahirElement.value = response.tgl_lahir;
+                    alamatElement.value = response.alamat;
+                    $('#negara_update').val(response.negara).trigger('change');
+                    $("#modal_update").modal('show');
+                } catch (error) {
+                    showError("Error...", error.response.data.message);
+                }
+            } else {
+                showError("Error...", "NIK Karyawan is not found");
+            }
+        }
+
+        async function detail_karyawan(nikParam) {
+            await set_detail_karyawan(nikParam);
+            $('#form_update_karyawan input').attr('disabled', true);
+            $('#form_update_karyawan textarea').attr('disabled', true);
+            $('#form_update_karyawan select').attr('disabled', true);
+            $('#modalUpdateLabel').html('Detail Data Pribadi');
+            $('#btn_update_karyawan').html('');
+            $('#btn_update_karyawan').attr('onclick', '');
+            $('#btn_update_karyawan').hide();
+        }
+
+        async function edit_karyawan(nikParam) {
+            await set_detail_karyawan(nikParam);
+            $('#btn_update_karyawan').attr('onclick', `update_karyawan(${nikParam})`);
+            $('#form_update_karyawan input').removeAttr('disabled');
+            $('#form_update_karyawan textarea').removeAttr('disabled');
+            $('#form_update_karyawan select').removeAttr('disabled');
+            $('#nik_update').attr('disabled', true);
+            $('#modalUpdateLabel').html('Edit Data Pribadi');
+            $('#btn_update_karyawan').html('Ubah');
+            $('#btn_update_karyawan').show();
+        }
+
+        async function update_karyawan(nikParam) {
+            let umur = await getUmur(tgl_lahirElement.value);
+
+            if (nameElement.value != '') {
+                let data = {
+                    name: nameElement.value,
+                    jenis_kelamin: $('input[name="jenis_kelamin_update"]:checked').val(),
+                    umur: umur,
+                    tgl_lahir: tgl_lahirElement.value,
+                    alamat: alamatElement.value,
+                    negara: negaraElement.value,
+                }
+
+                try {
+                    const responseJson = await axios.put(apiUrl + '/update_karyawan/' + nikParam, data);
+                    await loadKaryawan();
+                    $("#modal_update").modal('hide');
+                } catch (error) {
+                    showError("Error...", error.response.data.message);
+                }
+            } else {
+                if (nameElement.value == '') showError("Error", "Name is required");
+            }
+        }
+
+        async function delete_karyawan(nikParam) {
+            try {
+                const responseJson = await axios.delete(apiUrl + '/delete_karyawan/' + nikParam);
+                await loadKaryawan();
+            } catch (error) {
+                showError("Error...", error.response.data.message);
+            }
+        }
+
+        function showConfirm(nikParam) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await delete_karyawan(nikParam);
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+
+        function showError(title, message) {
+            Swal.fire({
+                icon: "error",
+                title: title,
+                text: message
+            });
+        }
+
+        function showInfo(title, message) {
+            Swal.fire({
+                icon: "info",
+                title: title,
+                text: message
+            });
+        }
+    </script>
+</body>
+
+</html>
